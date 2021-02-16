@@ -28,13 +28,23 @@ $newDesc = filter_input(INPUT_POST, "newdesc", FILTER_SANITIZE_STRING);
         <h1>ToDo List</h1>
     </header>
     <main>
-        <!-- results secion -->
-        <section>
+        <!-- add items section -->
+        <section id="addItem">
+            <h2>Add Item:</h2><br>
+            <form id="submitTask" action="<?php echo $_SERVER['PHP_SELF'] ?>" method="POST">
+                <input type="text" id="newTask" placeholder="Task" required><br>
+                <input type="text" id="newDesc" placeholder="Description" required>
+                <button type="submit" id="addButton"> ADD </button>
+            </form>
+        </section>
+        
             <?php
 
             if ($newTask && $newDesc) {
-                $query = "INSERT INTO todoitems(Title, Description)
-                    VALUES (:newTask, :newDesc)";
+                $query = "INSERT INTO todoitems
+                            (Title, Description)
+                          VALUES 
+                            (:newTask, :newDesc)";
                 $statement = $db->prepare($query);
                 $statement->bindValue(':newTask', $newTask);
                 $statement->bindValue(':newDesc', $newDesc);
@@ -46,38 +56,29 @@ $newDesc = filter_input(INPUT_POST, "newdesc", FILTER_SANITIZE_STRING);
             $query = 'SELECT * FROM todoitems';
             $statement = $db->prepare($query);
             $statement->execute();
-            $tasks = $statement->fetchAll();
+            $results = $statement->fetchAll();
             $statement->closeCursor();
 
-            if (!$tasks) {
+            if (!$results) {
                 echo "Put your feet up!";
             }
             ?>
-            
-            <?php foreach ($tasks as $task) : ?>
+        <!-- results section -->
+        <section>
+            <h2> Better get started on these: </h2>
+            <?php foreach ($results as $task) : ?>
                 <tr>
-                    <td><?php echo $task['Title']; ?></td>
-                    <td><?php echo $task['Description']; ?></td>
+                    <td><?php echo $task['Title']; ?></td><br>
+                    <td><?php echo $task['Description']; ?></td><br><br>
                 </tr>
                 <form class="delete" action="delete.php" method="POST">
                     <input type="hidden" value="<?php echo $result['ItemNum']?>">
-                    <button type="deleteButton" id="deleteButton">Delete</button>   
-                    
+                    <button type="deleteButton" id="deleteButton">Delete
+                    </button><br><br>
                 </form>
             <?php endforeach; ?>
         </section>
-        <!-- add items section -->
-        <section id="addItem">
-            <h2>Add Item:</h2><br>
-            <form id="submitTask" action="<?php echo $_SERVER['PHP_SELF'] ?>" method="POST">
-                <input type="text" id="newTask" placeholder="Task"><br>
-                <input type="text" id="newDesc" placeholder="Description"><br>
-                <button type="addButton" id="addButton"> ADD </button>
-            </form>
-            <?php
-
-            ?>
-        </section>
+        
     </main>
 </body>
 
