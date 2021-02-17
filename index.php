@@ -60,8 +60,13 @@ $newDesc = filter_input(INPUT_POST, "newDesc", FILTER_SANITIZE_STRING);
             <?php foreach ($results as $task) : 
                 ?>
                 <tr>
+                    <div id = "cssTask">
                     <td><?php echo $task['Title'] . " - "; ?></td>
-                    <td><?php echo $task['Description']; ?></td><br><br>
+                    </div>
+                    <div id = "cssDesc">
+                    <td><?php echo $task['Description']; ?></td>
+                    </div>
+                    
                 </tr>
                 <form class="delete" action="delete.php" method="POST">
                     <input type="hidden" name="id" value="<?php echo $task['ItemNum']?>">
