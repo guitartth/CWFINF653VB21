@@ -5,8 +5,8 @@
 
 require('database.php');
 
-$newTask = filter_input(INPUT_POST, "newtask", FILTER_SANITIZE_STRING);
-$newDesc = filter_input(INPUT_POST, "newdesc", FILTER_SANITIZE_STRING);
+$newTask = filter_input(INPUT_POST, "newTask", FILTER_SANITIZE_STRING);
+$newDesc = filter_input(INPUT_POST, "newDesc", FILTER_SANITIZE_STRING);
 
 ?>
 
@@ -18,6 +18,8 @@ $newDesc = filter_input(INPUT_POST, "newdesc", FILTER_SANITIZE_STRING);
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Craig's To Do List</title>
     <link rel="stylesheet" href="main.css">
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Permanent+Marker&display=swap" rel="stylesheet">
 </head>
 
 
@@ -25,19 +27,9 @@ $newDesc = filter_input(INPUT_POST, "newdesc", FILTER_SANITIZE_STRING);
 
 <body>
     <header>
-        <h1>ToDo List</h1>
+        <h1>To Do List</h1>
     </header>
     <main>
-        <!-- add items section -->
-        <section id="addItem">
-            <h2>Add Item:</h2><br>
-            <form id="submitTask" action="<?php echo $_SERVER['PHP_SELF'] ?>" method="POST">
-                <input type="text" id="newTask" placeholder="Task" required><br>
-                <input type="text" id="newDesc" placeholder="Description" required>
-                <button type="submit" id="addButton"> ADD </button>
-            </form>
-        </section>
-        
             <?php
 
             if ($newTask && $newDesc) {
@@ -59,24 +51,38 @@ $newDesc = filter_input(INPUT_POST, "newdesc", FILTER_SANITIZE_STRING);
             $results = $statement->fetchAll();
             $statement->closeCursor();
 
-            if (!$results) {
-                echo "Put your feet up!";
-            }
+            
             ?>
         <!-- results section -->
         <section>
-            <h2> Better get started on these: </h2>
-            <?php foreach ($results as $task) : ?>
+            <h2> Do this: </h2>
+            
+            <?php foreach ($results as $task) : 
+                ?>
                 <tr>
-                    <td><?php echo $task['Title']; ?></td><br>
+                    <td><?php echo $task['Title'] . " - "; ?></td>
                     <td><?php echo $task['Description']; ?></td><br><br>
                 </tr>
                 <form class="delete" action="delete.php" method="POST">
-                    <input type="hidden" value="<?php echo $result['ItemNum']?>">
+                    <input type="hidden" name="id" value="<?php echo $task['ItemNum']?>">
                     <button type="deleteButton" id="deleteButton">Delete
                     </button><br><br>
                 </form>
             <?php endforeach; ?>
+            <?php if (!$results) {
+                echo '<p id="noResult"> Put your feet up! </p>';
+                }
+                ?>
+        </section>
+        <!-- add items section -->
+        <section id="addItem">
+            <br><br><br><br>
+            <h2>Add Item:</h2>
+            <form id="submitTask" action="<?php echo $_SERVER['PHP_SELF'] ?>" method="POST">
+                <input type="text" name="newTask" id="newTask" placeholder="Task" required><br>
+                <input type="text" name="newDesc" id="newDesc" placeholder="Description" required><br><br>
+                <button type="submit" id="addButton"> ADD </button>
+            </form>
         </section>
         
     </main>

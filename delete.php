@@ -1,14 +1,14 @@
 <?php
 require('database.php');
 
-$itemNum = filter_input(INPUT_POST, 'itemNum', FILTER_VALIDATE_INT);
+$id = filter_input(INPUT_POST, 'id', FILTER_VALIDATE_INT);
 
 
-if ($itemNum) {
+if ($id) {
     $query = 'DELETE FROM todoitems
-                WHERE ItemNum = :itemNum';
+                WHERE ItemNum = :id';
     $statement = $db->prepare($query);
-    $statement->bindValue(':itemNum', $itemNum);
+    $statement->bindValue(':id', $id);
     $success = $statement->execute();
     $statement->closeCursor();
     header("location:index.php");
