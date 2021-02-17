@@ -82,7 +82,7 @@ $newDesc = filter_input(INPUT_POST, "newDesc", FILTER_SANITIZE_STRING);
         <!-- add items section -->
         <section id="addItem">
             <br><br><br><br>
-            <h2>Add Item:</h2>
+            <h2>Add Task:</h2>
             <form id="submitTask" action="<?php echo $_SERVER['PHP_SELF'] ?>" method="POST">
                 <input type="text" name="newTask" id="newTask" placeholder="Task" required><br>
                 <input type="text" name="newDesc" id="newDesc" placeholder="Description" required><br><br>
